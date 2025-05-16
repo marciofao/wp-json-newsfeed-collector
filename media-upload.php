@@ -36,7 +36,6 @@ function nc_attach_featured_media($post_id, $media_api_url) {
 
     // Download the image to a temporary location
     $tmp = download_url($media_url);
-
     // Check for errors
     if (is_wp_error($tmp)) {
         error_log('Error downloading image: ' . $tmp->get_error_message());
@@ -49,21 +48,42 @@ function nc_attach_featured_media($post_id, $media_api_url) {
         'tmp_name' => $tmp,
     );
 
+    // Move the file to the uploads directory
+    $upload = wp_handle_sideload($file_array, array('test_form' => false));
+    if (isset($upload['error'])) {
+        error_log('Upload error: ' . $upload['error']);
+        @unlink($tmp);
+        return;
+    }
+
+    // Prepare attachment data
+    $attachment = array(
+        'post_mime_type' => $upload['type'],
+        'post_title'     => sanitize_file_name($file_name),
+        'post_content'   => '',
+        'post_status'    => 'inherit'
+    );
+
     // Insert the attachment into the media library
-    $attachment_id = wp_insert_attachment($file_array, $media_url, $post_id);
+    $attachment_id = wp_insert_attachment($attachment, $upload['file'], $post_id);
 
     // Include image.php to use wp_generate_attachment_metadata()
     require_once(ABSPATH . 'wp-admin/includes/image.php');
 
     // Generate metadata for the attachment
-    $attach_data = wp_generate_attachment_metadata($attachment_id, $tmp);
+    $attach_data = wp_generate_attachment_metadata($attachment_id, $upload['file']);
 
     // Update the attachment metadata in the database
     wp_update_attachment_metadata($attachment_id, $attach_data);
+
     // Set the attachment as the featured image for the post
     set_post_thumbnail($post_id, $attachment_id);
-    // Clean up the temporary file
-    @unlink($tmp);
+
+    // Clean up the temporary file if it still exists
+    if (file_exists($tmp)) {
+        @unlink($tmp);
+    }
+
     // Return the attachment ID
     return $attachment_id;
 }
