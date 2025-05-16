@@ -115,7 +115,7 @@ function collect_external_wordpress_posts(){
                 update_post_meta($post_id, 'external_post_url', $post['link']);
                 
                 
-                if (!empty($post['custom_featured_images'])) {
+                if (isset($post['custom_featured_images']) && !empty($post['custom_featured_images'])) {
                     update_post_meta($post_id, 'custom_featured_images', $post['custom_featured_images']); 
                     // Fetch and upload the custom featured image
                     $image_url = $post['custom_featured_images'];
@@ -128,10 +128,18 @@ function collect_external_wordpress_posts(){
                         error_log('Error uploading featured image: ' . $image_id->get_error_message());
                     }
                 }
+                
+                if(isset($post['_links']['wp:featuredmedia'][0]['href']) && !empty($post['_links']['wp:featuredmedia'][0]['href'])){
+                    
+                    update_post_meta($post_id, 'nc_featured_media', $post['_links']['wp:featuredmedia'][0]['href']);
+                    $media_id = nc_attach_featured_media($post_id, $post['_links']['wp:featuredmedia'][0]['href']);
+                }
+               // die('output');
 
               //  update_post_meta($post_id, 'original_post_json', $post);    // may be too large for postmeta           
             }
-            error_log('Post imported: '. $post['id']);  
+           // die('end');
+            error_log('Post imported: '. $post['id'].' - '. $post_id);  
         }
 
         if (count($posts) < $chunk_size) {
