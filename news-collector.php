@@ -29,8 +29,9 @@ function collect_external_wordpress_posts(){
     update_option('is_news_collector_running', true);
 
     $endpoint = get_option('external_wordpress_endpoint');
-    $per_page = get_option('external_wordpress_per_page', 50);
+    $per_page = get_option('external_wordpress_per_page', 30);
     $tags = get_option('external_wordpress_tags');
+    $categories = get_option('external_wordpress_categories');
 
     if (!$endpoint) {
         error_log('External WordPress endpoint not set in wp-options');
@@ -48,6 +49,9 @@ function collect_external_wordpress_posts(){
         $url = trailingslashit($endpoint) . "wp-json/wp/v2/posts?per_page={$chunk_size}&page={$page}";
         if($tags){
             $url .= '&tags='.$tags;
+        }
+        if($categories){
+            $url .= '&categories='.$categories;
         }
         error_log('Running news collector on: '.$url);
 

@@ -79,7 +79,7 @@ function news_collector_options_page()
                     
                 </tr>
                 <tr>
-                    <th scope="row"><label for="external_wordpress_categories">Tags</label></th>
+                    <th scope="row"><label for="external_wordpress_categories">Categorias</label></th>
                     <td>
                         <input name="external_wordpress_categories" type="text" id="external_wordpress_categories" value="<?php echo esc_attr($categories); ?>" class="regular-text" >
                         <br>
