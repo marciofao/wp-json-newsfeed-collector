@@ -101,7 +101,7 @@ function collect_external_wordpress_posts(){
             $new_post = array(
                 'post_title' => $post['title']['rendered'],
                 'post_content' => $post['content']['rendered'],
-                'post_excerpt' => $post['excerpt']['rendered'],
+                'post_excerpt' => strip_tags($post['excerpt']['rendered']),
                 'post_status'  => 'publish',
                 'post_author'  => 1,                              // Set to an appropriate user ID
                 'post_date'    => $post['date'],
