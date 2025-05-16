@@ -36,6 +36,7 @@ function news_collector_options_page()
         update_option('external_wordpress_endpoint', sanitize_text_field($_POST['external_wordpress_endpoint']));
         update_option('external_wordpress_per_page', intval($_POST['external_wordpress_per_page']));
         update_option('external_wordpress_tags', sanitize_text_field($_POST['external_wordpress_tags']));
+        update_option('external_wordpress_tags', sanitize_text_field($_POST['external_wordpress_categories']));
         update_option('news_collector_recurrence', sanitize_text_field($_POST['news_collector_recurrence']));
 
         jusbr_do_news_collector_scheduling_event();
@@ -53,6 +54,7 @@ function news_collector_options_page()
     $endpoint = get_option('external_wordpress_endpoint', '');
     $per_page = get_option('external_wordpress_per_page', 30);
     $tags = get_option('external_wordpress_tags', '');
+    $categories = get_option('external_wordpress_categories', '');
 
 ?>
     <div class="wrap">
@@ -73,6 +75,15 @@ function news_collector_options_page()
                         <input name="external_wordpress_tags" type="text" id="external_wordpress_tags" value="<?php echo esc_attr($tags); ?>" class="regular-text" >
                         <br>
                         <small>ID numérico das tags separadas por virgula, ou vazio para buscar todas as notícias sem filtro</small>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <th scope="row"><label for="external_wordpress_categories">Tags</label></th>
+                    <td>
+                        <input name="external_wordpress_categories" type="text" id="external_wordpress_categories" value="<?php echo esc_attr($categories); ?>" class="regular-text" >
+                        <br>
+                        <small>ID numérico das categorias separadas por virgula, ou vazio para buscar todas as notícias sem filtro</small>
                     </td>
                     
                 </tr>
