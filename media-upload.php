@@ -1,6 +1,9 @@
-<?php 
-function nc_attach_featured_media($post_id, $media_api_url) {
-    
+<?php function nc_attach_featured_media($post_id, $media_api_url) {
+    // Include image.php to use wp_generate_attachment_metadata()
+    require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+    require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+    require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+
     // Check if the media URL is valid
     if (empty($media_api_url)) {
         return;
@@ -28,10 +31,9 @@ function nc_attach_featured_media($post_id, $media_api_url) {
     // Check if the file already exists in the media library
     $attachment_id = attachment_url_to_postid($media_url);
     if ($attachment_id) {
-        die('attachment exists');
         // If it exists, set it as the featured image
         set_post_thumbnail($post_id, $attachment_id);
-        return;
+        return $attachment_id;
     }
 
     // Download the image to a temporary location
@@ -66,9 +68,6 @@ function nc_attach_featured_media($post_id, $media_api_url) {
 
     // Insert the attachment into the media library
     $attachment_id = wp_insert_attachment($attachment, $upload['file'], $post_id);
-
-    // Include image.php to use wp_generate_attachment_metadata()
-    require_once(ABSPATH . 'wp-admin/includes/image.php');
 
     // Generate metadata for the attachment
     $attach_data = wp_generate_attachment_metadata($attachment_id, $upload['file']);

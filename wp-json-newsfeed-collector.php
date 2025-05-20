@@ -9,6 +9,8 @@
  * Author uri: https://marciofao.github.io/
  */
 
- require_once('news-collector-options-page.php');
- require_once('media-upload.php');
- require_once('news-collector.php');
+ add_action( 'init', function() {
+    require_once('news-collector-options-page.php');
+    require_once('media-upload.php');
+    require_once('news-collector.php');
+ } );
