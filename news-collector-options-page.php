@@ -46,7 +46,7 @@ function news_collector_options_page()
 
     // Trigger news collection if the button is clicked
     if (isset($_POST['collect_news'])) {
-        do_action('collect_external_wordpress_posts_cron');
+        do_action('nc_collect_external_wordpress_posts_cron');
         echo '<div class="updated"><p>Coleta de notícias finalizada! 👍</p></div>';
     }
 
