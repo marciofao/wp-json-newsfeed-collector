@@ -2,13 +2,13 @@
 
 // Schedule the cron job
 if (!wp_next_scheduled('collect_external_wordpress_posts_cron')) {
-   jusbr_do_news_collector_scheduling_event();
+   nc_do_news_collector_scheduling_event();
 }
 
-function jusbr_do_news_collector_scheduling_event() {
-    $recurrence = get_option('news_collector_recurrence');
+function nc_do_news_collector_scheduling_event() {
+    $recurrence = get_option('nc_recurrence');
     if (!$recurrence) {
-        error_log('news_collector_recurrence option is not set');
+        error_log('nc_recurrence option is not set');
         return;
     }
     wp_clear_scheduled_hook('collect_external_wordpress_posts_cron');
@@ -28,9 +28,9 @@ function collect_external_wordpress_posts(){
 
     update_option('is_news_collector_running', true);
 
-    $endpoint = get_option('external_wordpress_endpoint');
-    $per_page = get_option('external_wordpress_per_page', 30);
-    $tags = get_option('external_wordpress_tags');
+    $endpoint = get_option('nc_external_wordpress_endpoint');
+    $per_page = get_option('nc_external_wordpress_per_page', 30);
+    $tags = get_option('nc_external_wordpress_tags');
     $categories = get_option('external_wordpress_categories');
 
     if (!$endpoint) {

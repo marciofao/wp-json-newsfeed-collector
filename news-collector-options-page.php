@@ -33,13 +33,13 @@ function news_collector_options_page()
 
     // Save settings if the form is submitted
     if (isset($_POST['submit'])) {
-        update_option('external_wordpress_endpoint', sanitize_text_field($_POST['external_wordpress_endpoint']));
-        update_option('external_wordpress_per_page', intval($_POST['external_wordpress_per_page']));
-        update_option('external_wordpress_tags', sanitize_text_field($_POST['external_wordpress_tags']));
-        update_option('external_wordpress_tags', sanitize_text_field($_POST['external_wordpress_categories']));
-        update_option('news_collector_recurrence', sanitize_text_field($_POST['news_collector_recurrence']));
+        update_option('nc_external_wordpress_endpoint', sanitize_text_field($_POST['nc_external_wordpress_endpoint']));
+        update_option('nc_external_wordpress_per_page', intval($_POST['nc_external_wordpress_per_page']));
+        update_option('nc_external_wordpress_tags', sanitize_text_field($_POST['nc_external_wordpress_tags']));
+        update_option('nc_external_wordpress_tags', sanitize_text_field($_POST['external_wordpress_categories']));
+        update_option('nc_recurrence', sanitize_text_field($_POST['nc_recurrence']));
 
-        jusbr_do_news_collector_scheduling_event();
+        nc_do_news_collector_scheduling_event();
 
         echo '<div class="updated"><p>Configurações salvas.</p></div>';
     }
@@ -51,9 +51,9 @@ function news_collector_options_page()
     }
 
     // Get current option values
-    $endpoint = get_option('external_wordpress_endpoint', '');
-    $per_page = get_option('external_wordpress_per_page', 30);
-    $tags = get_option('external_wordpress_tags', '');
+    $endpoint = get_option('nc_external_wordpress_endpoint', '');
+    $per_page = get_option('nc_external_wordpress_per_page', 30);
+    $tags = get_option('nc_external_wordpress_tags', '');
     $categories = get_option('external_wordpress_categories', '');
 
 ?>
@@ -62,17 +62,17 @@ function news_collector_options_page()
         <form method="post" action="">
             <table class="form-table">
                 <tr>
-                    <th scope="row"><label for="external_wordpress_endpoint">Endereço WordPress Externo *</label></th>
-                    <td><input name="external_wordpress_endpoint" type="text" id="external_wordpress_endpoint" value="<?php echo esc_attr($endpoint); ?>" class="regular-text" required></td>
+                    <th scope="row"><label for="nc_external_wordpress_endpoint">Endereço WordPress Externo *</label></th>
+                    <td><input name="nc_external_wordpress_endpoint" type="text" id="nc_external_wordpress_endpoint" value="<?php echo esc_attr($endpoint); ?>" class="regular-text" required></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="external_wordpress_per_page">Quant. Notícias buscar por vez:*</label></th>
-                    <td><input name="external_wordpress_per_page" type="number" id="external_wordpress_per_page" value="<?php echo esc_attr($per_page); ?>" class="small-text"  required></td>
+                    <th scope="row"><label for="nc_external_wordpress_per_page">Quant. Notícias buscar por vez:*</label></th>
+                    <td><input name="nc_external_wordpress_per_page" type="number" id="nc_external_wordpress_per_page" value="<?php echo esc_attr($per_page); ?>" class="small-text"  required></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="external_wordpress_tags">Tags</label></th>
+                    <th scope="row"><label for="nc_external_wordpress_tags">Tags</label></th>
                     <td>
-                        <input name="external_wordpress_tags" type="text" id="external_wordpress_tags" value="<?php echo esc_attr($tags); ?>" class="regular-text" >
+                        <input name="nc_external_wordpress_tags" type="text" id="nc_external_wordpress_tags" value="<?php echo esc_attr($tags); ?>" class="regular-text" >
                         <br>
                         <small>ID numérico das tags separadas por virgula, ou vazio para buscar todas as notícias sem filtro</small>
                     </td>
@@ -88,13 +88,13 @@ function news_collector_options_page()
                     
                 </tr>
                 <tr>
-                    <th scope="row"><label for="news_collector_recurrence">Recorrência</label></th>
+                    <th scope="row"><label for="nc_recurrence">Recorrência</label></th>
                     <td>
-                        <select name="news_collector_recurrence" id="news_collector_recurrence">
-                            <option value="hourly" <?php selected(get_option('news_collector_recurrence', 'daily'), 'hourly'); ?>>Horária</option>
-                            <option value="twicedaily" <?php selected(get_option('news_collector_recurrence', 'daily'), 'twicedaily'); ?>>Duas vezes ao dia</option>
-                            <option value="daily" <?php selected(get_option('news_collector_recurrence', 'daily'), 'daily'); ?>>Diária</option>
-                            <option value="weekly" <?php selected(get_option('news_collector_recurrence', 'daily'), 'weekly'); ?>>Semanal</option>
+                        <select name="nc_recurrence" id="nc_recurrence">
+                            <option value="hourly" <?php selected(get_option('nc_recurrence', 'daily'), 'hourly'); ?>>Horária</option>
+                            <option value="twicedaily" <?php selected(get_option('nc_recurrence', 'daily'), 'twicedaily'); ?>>Duas vezes ao dia</option>
+                            <option value="daily" <?php selected(get_option('nc_recurrence', 'daily'), 'daily'); ?>>Diária</option>
+                            <option value="weekly" <?php selected(get_option('nc_recurrence', 'daily'), 'weekly'); ?>>Semanal</option>
                         </select>
                     </td>
                 </tr>
