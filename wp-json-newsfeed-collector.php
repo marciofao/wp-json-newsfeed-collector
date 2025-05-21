@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Newsfeed Collector
  * Description: Collects newsfeed from various sources and displays them on the website.
- * Version: 1.0
+ * Version: 1.1
  * Author: Marcio Fão
  * License: GPL2
  * Author uri: https://marciofao.github.io/
