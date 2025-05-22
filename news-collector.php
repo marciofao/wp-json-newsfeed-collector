@@ -129,12 +129,17 @@ function collect_external_wordpress_posts(){
                     }
                 }
                 
+                // if(isset($post['_links']['wp:featuredmedia'][0]['href']) && !empty($post['_links']['wp:featuredmedia'][0]['href'])){
+                //     update_post_meta($post_id, 'nc_featured_media', $post['_links']['wp:featuredmedia'][0]['href']);
+                //     nc_attach_featured_media($post_id, $post['_links']['wp:featuredmedia'][0]['href']);
+                //     update_post_meta($post_id, 'custom_featured_images', $image_url);
+                // }
+               
                 if(isset($post['_links']['wp:featuredmedia'][0]['href']) && !empty($post['_links']['wp:featuredmedia'][0]['href'])){
-                    
-                    update_post_meta($post_id, 'nc_featured_media', $post['_links']['wp:featuredmedia'][0]['href']);
-                    $media_id = nc_attach_featured_media($post_id, $post['_links']['wp:featuredmedia'][0]['href']);
+                    $image_url = $post['_links']['wp:featuredmedia'][0]['href'];
+                    nc_attach_external_image_as_featured($post_id, $image_url);
+                    update_post_meta($post_id, 'custom_featured_images', $image_url);
                 }
-               // die('output');
 
               //  update_post_meta($post_id, 'original_post_json', $post);    // may be too large for postmeta           
             }
