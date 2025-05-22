@@ -12,6 +12,6 @@
 add_action('plugins_loaded', function() {
     require_once('news-collector-options-page.php');
     require_once('news-collector.php');
-    //TODO: Uncomment the following line to enable cleanup functionality
+   //TODO: Uncomment the following line to enable cleanup functionality - needs improvement
    // require_once('nc-cleanup.php');
 });
