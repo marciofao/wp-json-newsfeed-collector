@@ -19,15 +19,9 @@ function nc_do_news_collector_scheduling_event() {
 add_action('nc_collect_external_wordpress_posts_cron', 'collect_external_wordpress_posts');
 
 function collect_external_wordpress_posts(){
+
+    require_once('nc-media-upload.php');
     
-    // DISABLED THE OPTION CHECK IF IS RUNNING, AS IT MAY BE CAUSING ISSUE OF NEVER UPDATING THE OPTION IN CASE OF MID-RUN ERROR
-    // if (!isset($_GET['debug_collector']) && get_option('is_news_collector_running', false)) {
-    //     error_log('News collector is already running');
-    //     return;
-    // }
-
-    update_option('is_news_collector_running', true);
-
     $endpoint = get_option('nc_external_wordpress_endpoint');
     $per_page = get_option('nc_external_wordpress_per_page', 30);
     $tags = get_option('nc_external_wordpress_tags');
@@ -35,12 +29,9 @@ function collect_external_wordpress_posts(){
 
     if (!$endpoint) {
         error_log('External WordPress endpoint not set in wp-options');
-        update_option('is_news_collector_running', false);
         return;
     }
 
-   
-    
     $chunk_size = 10;
     $total_pages = ceil($per_page / $chunk_size);
 
@@ -129,21 +120,13 @@ function collect_external_wordpress_posts(){
                     }
                 }
                 
-                // if(isset($post['_links']['wp:featuredmedia'][0]['href']) && !empty($post['_links']['wp:featuredmedia'][0]['href'])){
-                //     update_post_meta($post_id, 'nc_featured_media', $post['_links']['wp:featuredmedia'][0]['href']);
-                //     nc_attach_featured_media($post_id, $post['_links']['wp:featuredmedia'][0]['href']);
-                //     update_post_meta($post_id, 'custom_featured_images', $image_url);
-                // }
-               
                 if(isset($post['_links']['wp:featuredmedia'][0]['href']) && !empty($post['_links']['wp:featuredmedia'][0]['href'])){
-                    $image_url = $post['_links']['wp:featuredmedia'][0]['href'];
-                    nc_attach_external_image_as_featured($post_id, $image_url);
-                    update_post_meta($post_id, 'custom_featured_images', $image_url);
+                    $image_post_url = $post['_links']['wp:featuredmedia'][0]['href'];
+                    update_post_meta($post_id, 'nc_featured_media', $image_post_url);
+                    nc_attach_featured_media($post_id, $image_post_url);
                 }
-
-              //  update_post_meta($post_id, 'original_post_json', $post);    // may be too large for postmeta           
+               
             }
-           // die('end');
             error_log('Post imported: '. $post['id'].' - '. $post_id);  
         }
 
@@ -152,7 +135,6 @@ function collect_external_wordpress_posts(){
         }
     }
 
-    update_option('is_news_collector_running', false);
     error_log('News collector finished');
 }
 
