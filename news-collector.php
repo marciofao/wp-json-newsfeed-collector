@@ -29,12 +29,13 @@ function nc_collect_external_wordpress_posts(){
     $categories = get_option('external_wordpress_categories');
 
     //TODO: optimize this function to fetch tags and categories and avoid script timeout
-    nc_fetch_tags_and_categs($endpoint);
-
+    
     if (!$endpoint) {
         error_log('External WordPress endpoint not set in wp-options');
         return;
     }
+    
+    nc_fetch_tags_and_categs($endpoint);
 
     $chunk_size = 10;
     $total_pages = ceil($per_page / $chunk_size);
