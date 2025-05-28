@@ -23,10 +23,6 @@ function nc_fetch_terms($endpoint, $taxonomy, $remote_type, $meta_key) {
                 'description' => $remote_term['description'],
                 'slug'        => $remote_term['slug'],
             ];
-            // Add parent for categories if present
-            if ($taxonomy === 'category' && isset($remote_term['parent'])) {
-                $args['parent'] = $remote_term['parent'];
-            }
             if (!$term) {
                 $result = wp_insert_term($remote_term['name'], $taxonomy, $args);
                 if (is_wp_error($result)) {
