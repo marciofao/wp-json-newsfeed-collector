@@ -26,8 +26,7 @@ function nc_collect_external_wordpress_posts(){
     $endpoint = get_option('nc_external_wordpress_endpoint');
     $per_page = get_option('nc_external_wordpress_per_page', 30);
     $tags = get_option('nc_external_wordpress_tags');
-    $categories = get_option('external_wordpress_categories');
-
+    $categories = get_option('nc_external_wordpress_categories');
     //TODO: optimize this function to fetch tags and categories and avoid script timeout
     
     if (!$endpoint) {
